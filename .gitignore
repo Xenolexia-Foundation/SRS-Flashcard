@@ -1,0 +1,17 @@
+node_modules
+dist
+*.local
+.DS_Store
+
+# Markdown except README
+*.md
+!README.md
+
+# Intermediates
+.cache
+.vite
+*.tsbuildinfo
+.tmp
+.temp
+tmp
+temp
