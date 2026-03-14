@@ -1,3 +1,8 @@
+/**
+ * Copyright (C) 2016-2026 Husain Alamri (H4n) and Xenolexia Foundation.
+ * Licensed under the GNU Affero General Public License v3.0 (AGPL-3.0). See LICENSE.
+ */
+
 import { useCallback, useEffect, useState } from 'react'
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
 import { useNavigation, useRoute } from '@react-navigation/native'
