@@ -1,6 +1,16 @@
 const { app, BrowserWindow } = require('electron')
 const path = require('path')
 
+;(function warnIfElectronOutsideSupportedBand() {
+  const raw = process.versions.electron
+  if (raw == null || raw === '') return
+  const major = parseInt(String(raw).split('.')[0] ?? '', 10)
+  if (!Number.isFinite(major) || (major >= 39 && major <= 41)) return
+  console.warn(
+    `[SRS Flashcard] Electron major ${major} is outside the supported band (39–41).`,
+  )
+})()
+
 const isDev = process.argv.includes('--dev') || process.env.ELECTRON_DEV === '1'
 
 function createWindow() {

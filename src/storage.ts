@@ -5,41 +5,14 @@
 
 /**
  * Local storage layer: single place for all persistence.
- * Uses STORAGE_KEYS; integrates with SRS for recordReview.
+ * Uses @xenolexia/lib for getJSON/setJSON/clearKeys; integrates with SRS for recordReview.
  */
+import { getJSON, setJSON, setStorageBackend, clearKeys } from '@xenolexia/lib'
 import { STORAGE_KEYS } from './types'
 import type { Card, CardSchedule, Deck, ReviewRecord, ReviewOutcome } from './types'
 import { initialSchedule, scheduleAfterReview } from './srs'
 
-type StorageLike = Pick<Storage, 'getItem' | 'setItem' | 'removeItem'>
-
-let storageBackend: StorageLike | null =
-  typeof localStorage !== 'undefined' ? localStorage : null
-
-/** For tests: inject a mock storage. */
-export function setStorageBackend(backend: StorageLike | null): void {
-  storageBackend = backend
-}
-
-function getJSON<T>(key: string, fallback: T): T {
-  if (!storageBackend) return fallback
-  try {
-    const raw = storageBackend.getItem(key)
-    if (raw == null) return fallback
-    return JSON.parse(raw) as T
-  } catch {
-    return fallback
-  }
-}
-
-function setJSON(key: string, value: unknown): void {
-  if (!storageBackend) return
-  try {
-    storageBackend.setItem(key, JSON.stringify(value))
-  } catch {
-    // quota or private mode
-  }
-}
+export { setStorageBackend }
 
 // --- Decks ---
 
@@ -169,10 +142,7 @@ export function recordReview(
 
 /** Clear all app data (debug / reset) */
 export function clearProgress(): void {
-  if (!storageBackend) return
-  for (const key of Object.values(STORAGE_KEYS)) {
-    storageBackend.removeItem(key)
-  }
+  clearKeys(Object.values(STORAGE_KEYS))
 }
 
 // --- Import (merge) ---
